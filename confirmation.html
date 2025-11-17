@@ -1,0 +1,47 @@
+<!-- Save as confirmation.html -->
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Order Confirmation</title>
+<style>
+body{font-family:Inter,system-ui,Roboto;margin:0;background:#f6f8fb;color:#17314A}.wrap{max-width:900px;margin:28px auto;padding:18px}
+.header{background:#17314A;color:#fff;padding:14px;border-radius:8px;text-align:center}
+.card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 8px 24px rgba(23,49,74,0.06);margin-top:18px}
+label{font-weight:700;color:#6b7280}
+.row{display:flex;justify-content:space-between;padding:8px 0}
+.btn{margin-top:12px;padding:10px 12px;border-radius:8px;border:0;background:#E6C23F;color:#17314A;font-weight:800;cursor:pointer}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header"><h2>Order Confirmation</h2></div>
+    <div class="card" id="orderCard">Loading...</div>
+    <div style="text-align:center;margin-top:12px"><button class="btn" onclick="location.href='catalog.html'">Back to Catalog</button></div>
+  </div>
+
+<script>
+function getLS(k){try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return []}}
+function qsParam(name){ const u=new URLSearchParams(location.search); return u.get(name)}
+const orders=getLS('oc_orders_v1');
+const id=qsParam('id');
+const card=document.getElementById('orderCard');
+if(!id){ card.innerHTML='No order id provided'; }
+else{
+  const o = orders.find(x=>x.id===id);
+  if(!o) card.innerHTML='Order not found';
+  else{
+    card.innerHTML = `<h3>Order ${o.id}</h3><div class="row"><div>Buyer</div><div>${o.buyer.name} — ${o.buyer.email}</div></div><div style="margin-top:12px"><strong>Items</strong></div>`;
+    const ul=document.createElement('div');
+    o.items.forEach(it=>{
+      const r=document.createElement('div'); r.className='row'; r.innerHTML = `<div>${it.title} x ${it.quantity||1}</div><div>$${(it.price*(it.quantity||1)).toFixed(2)}</div>`;
+      ul.appendChild(r);
+    });
+    card.appendChild(ul);
+    const s = document.createElement('div'); s.innerHTML = `<div class="row"><div>Subtotal</div><div>$${o.subtotal.toFixed(2)}</div></div><div class="row"><div>Discount</div><div>-$${o.discount.toFixed(2)}</div></div><div class="row total" style="font-weight:800"><div>Total</div><div>$${o.total.toFixed(2)}</div></div>`;
+    card.appendChild(s);
+  }
+}
+</script>
+</body>
+</html>

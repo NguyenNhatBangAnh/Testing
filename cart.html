@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Shopping Cart — Online Courses</title>
+<style>
+:root{
+  --primary:#E6C23F;
+  --accent:#D97D2E;
+  --navy:#17314A;
+  --bg:#F6F8FB;
+  --card:#fff;
+  --muted:#6b7280;
+  --danger:#D23B3B;
+  --radius:12px;
+  --shadow:0 6px 18px rgba(23,49,74,0.06);
+  font-family:Inter,system-ui,"Segoe UI",Roboto;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--navy);
+  padding:24px;
+  display:flex;
+  justify-content:center;
+}
+.container{max-width:1100px;width:100%}
+
+/* Header */
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--primary);
+  padding:22px 16px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  margin-bottom:28px;
+}
+.brand{font-weight:700;font-size:22px;letter-spacing:1px}
+nav a{margin-left:18px;text-decoration:none;color:var(--navy);font-weight:600}
+
+/* Layout */
+main{display:grid;grid-template-columns:1fr 340px;gap:24px}
+h1{font-size:32px;margin:0 0 18px}
+
+/* Cart list */
+.cart-list, .saved-list{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:22px;
+  margin-bottom:22px;
+}
+.toast{
+  background:#e8f7ec;color:#1a6b2b;
+  padding:10px 16px;border-radius:8px;
+  display:inline-block;margin-bottom:14px;font-weight:600;
+}
+.item{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid rgba(23,49,74,0.08)}
+.item:last-child{border-bottom:0}
+.thumb{
+  width:96px;height:96px;border-radius:10px;overflow:hidden;flex-shrink:0;
+}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.meta{flex:1}
+.meta h3{margin:0 0 4px;font-size:19px}
+.meta p{margin:0;color:var(--muted);font-size:14px}
+.price{font-weight:700;font-size:20px;min-width:90px;text-align:right;color:var(--navy)}
+.actions{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap}
+button.btn{
+  padding:7px 12px;border-radius:10px;border:1px solid rgba(23,49,74,0.1);
+  background:#fff;font-weight:600;cursor:pointer
+}
+.btn-remove{color:var(--danger);border-color:var(--danger)}
+.btn-save{color:var(--accent);border-color:var(--accent)}
+
+/* Summary */
+aside.summary{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:22px;
+  height:fit-content;
+}
+.summary h2{margin:0 0 10px;font-size:24px}
+.summary .row{display:flex;justify-content:space-between;padding:6px 0;color:var(--muted)}
+.summary .row.total{font-weight:800;color:var(--navy);border-top:1px solid rgba(23,49,74,0.06);margin-top:10px;padding-top:10px}
+.coupon{display:flex;gap:8px;margin:16px 0}
+.coupon input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(23,49,74,0.1)}
+.coupon button{background:var(--navy);color:#fff;border:0;padding:10px 16px;border-radius:10px;font-weight:700;cursor:pointer}
+.cta-grid{display:flex;gap:12px;margin-top:12px}
+.btn-primary{flex:1;background:var(--primary);border:0;padding:14px;border-radius:10px;font-weight:800;cursor:pointer}
+.btn-ghost{flex:1;border:1px solid rgba(23,49,74,0.1);background:transparent;padding:14px;border-radius:10px;font-weight:700;cursor:pointer}
+
+/* Saved for later */
+.saved-list h2{margin-top:0;font-size:24px}
+.saved-item .btn-move{
+  border-color:var(--navy);
+  color:var(--navy);
+}
+
+/* Recommender strip */
+.recommend{
+  background:#fff;
+  padding:18px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+.recommend h2{margin:0 0 12px;font-size:22px}
+.recommend-cards{display:flex;gap:14px;overflow-x:auto}
+.rec-card{
+  background:#fff;border:1px solid rgba(23,49,74,0.06);
+  border-radius:10px;min-width:200px;flex:0 0 auto;
+  box-shadow:0 2px 8px rgba(23,49,74,0.05);
+  display:flex;flex-direction:column;
+}
+.rec-card img{width:100%;height:120px;object-fit:cover;border-radius:10px 10px 0 0}
+.rec-card .body{padding:10px;flex:1;display:flex;flex-direction:column}
+.rec-card h4{margin:0;font-size:16px}
+.rec-card .price{font-size:16px;font-weight:700;margin-top:auto}
+.rec-card button{
+  background:var(--accent);border:0;border-radius:8px;
+  color:#fff;padding:8px;margin-top:8px;cursor:pointer;font-weight:600;
+}
+
+/* Responsive */
+@media(max-width:960px){main{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="brand">ONLINE COURSES</div>
+    <nav>
+      <a href="#">Home</a><a href="#">Courses</a><a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- LEFT -->
+    <section class="left">
+      <section class="cart-list">
+        <h1>Shopping Cart (2 items)</h1>
+        <div class="toast">✔ Đã thêm vào giỏ hàng</div>
+
+        <article class="item">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=60" alt=""></div>
+          <div class="meta">
+            <h3>The Complete UX Research Course</h3>
+            <p>by Teresa Butler</p>
+            <div class="actions">
+              <button class="btn">Edit</button>
+              <button class="btn btn-save">Save for later</button>
+              <button class="btn btn-remove">Remove</button>
+            </div>
+          </div>
+          <div class="price">$99</div>
+        </article>
+
+        <article class="item">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1603415526960-f7e0328c1b97?w=600&q=60" alt=""></div>
+          <div class="meta">
+            <h3>The Complete Web Development Course</h3>
+            <p>by Mark Johnson</p>
+            <div class="actions">
+              <button class="btn">Edit</button>
+              <button class="btn btn-save">Save for later</button>
+              <button class="btn btn-remove">Remove</button>
+            </div>
+          </div>
+          <div class="price">$149</div>
+        </article>
+
+        <div class="coupon">
+          <input placeholder="Coupon code">
+          <button>Apply</button>
+        </div>
+        <div class="cta-grid">
+          <button class="btn-ghost">Continue Shopping</button>
+          <button class="btn-primary">Checkout</button>
+        </div>
+      </section>
+
+      <!-- Saved for later -->
+      <section class="saved-list">
+        <h2>Saved for later</h2>
+        <article class="item saved-item">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&q=60" alt=""></div>
+          <div class="meta">
+            <h3>UI Animation Fundamentals</h3>
+            <p>by Amy Lee</p>
+            <div class="actions">
+              <button class="btn btn-move">Move to cart</button>
+              <button class="btn btn-remove">Remove</button>
+            </div>
+          </div>
+          <div class="price">$79</div>
+        </article>
+      </section>
+
+      <!-- Recommender -->
+      <section class="recommend">
+        <h2>People who bought this also bought...</h2>
+        <div class="recommend-cards">
+          <div class="rec-card">
+            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=60" alt="">
+            <div class="body">
+              <h4>Intro to Figma for Beginners</h4>
+              <span class="price">$59</span>
+              <button>Add to Cart</button>
+            </div>
+          </div>
+          <div class="rec-card">
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=60" alt="">
+            <div class="body">
+              <h4>Responsive Design Masterclass</h4>
+              <span class="price">$69</span>
+              <button>Add to Cart</button>
+            </div>
+          </div>
+          <div class="rec-card">
+            <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=600&q=60" alt="">
+            <div class="body">
+              <h4>JavaScript ES6 Deep Dive</h4>
+              <span class="price">$89</span>
+              <button>Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="summary">
+      <h2>Cart Summary</h2>
+      <div class="row"><span>Subtotal:</span><span>$248</span></div>
+      <div class="row"><span>Discount:</span><span style="color:var(--danger)">-$31</span></div>
+      <div class="row total"><span>Total</span><span>$217</span></div>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px">Demo checkout — no real payments processed.</p>
+    </aside>
+  </main>
+</div>
+</body>
+</html>

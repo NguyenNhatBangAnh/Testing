@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Checkout — EduCourses (Demo)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">EduCourses</div>
+      <nav aria-label="Primary">
+        <a href="#" class="nav-link">Catalog</a>
+        <a href="#" class="nav-link">My Courses</a>
+        <a href="#" class="nav-link">Support</a>
+      </nav>
+      <div class="header-actions">
+        <button class="btn btn-ghost" aria-label="Account">Minh</button>
+        <button class="btn btn-ghost" aria-label="Cart">🛒 <span class="badge">2</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="main">
+    <h1 class="page-title">Checkout — Thanh toán</h1>
+
+    <!-- Step indicator -->
+    <ol class="steps" role="list" aria-label="Checkout steps">
+      <li class="step" id="step-ind-1" aria-current="step">1. Thông tin</li>
+      <li class="step" id="step-ind-2">2. Thanh toán</li>
+      <li class="step" id="step-ind-3">3. Xem lại</li>
+    </ol>
+
+    <!-- Multi-step form area -->
+    <section class="checkout-wrapper" aria-live="polite">
+      <!-- Step 1: Contact & Billing -->
+      <form id="step-1" class="step-panel grid-2" novalidate>
+        <div class="panel">
+          <h2>1. Thông tin liên hệ & hóa đơn</h2>
+
+          <label for="fullName">Họ và tên <span class="required">*</span></label>
+          <input id="fullName" name="fullName" required value="Nguyễn Minh" />
+
+          <label for="email">Email <span class="required">*</span></label>
+          <input id="email" name="email" type="email" required value="minh@student.edu" />
+
+          <label for="company">Company (nếu cần)</label>
+          <input id="company" name="company" placeholder="Công ty / Tổ chức" />
+
+          <label for="billingAddress">Địa chỉ (cho hóa đơn)</label>
+          <input id="billingAddress" name="billingAddress" placeholder="Số nhà, đường, quận, thành phố" />
+
+          <label for="country">Quốc gia</label>
+          <select id="country" name="country">
+            <option value="VN" selected>Vietnam</option>
+            <option value="US">United States</option>
+            <option value="AU">Australia</option>
+          </select>
+
+          <div class="coupon-row">
+            <label for="coupon">Mã giảm giá</label>
+            <div class="coupon-controls">
+              <input id="coupon" name="coupon" placeholder="Nhập mã (ví dụ: COUPON10)" />
+              <button type="button" id="applyCoupon" class="btn">Áp dụng</button>
+            </div>
+            <div id="couponMessage" class="form-note" aria-live="polite"></div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="backToCatalog">Quay lại mua thêm</button>
+            <button type="button" class="btn btn-primary" id="toPayment">Tiếp tục: Thanh toán →</button>
+          </div>
+        </div>
+
+        <aside class="panel summary sticky" aria-labelledby="order-summary-title">
+          <h3 id="order-summary-title">Tóm tắt đơn hàng</h3>
+          <ul id="summaryList" class="summary-list">
+            <!-- JS fills items -->
+          </ul>
+
+          <dl class="totals">
+            <div><dt>Subtotal</dt><dd id="subtotal">$0.00</dd></div>
+            <div><dt>Discount</dt><dd id="discount">-$0.00</dd></div>
+            <div><dt>Tax (5%)</dt><dd id="tax">$0.00</dd></div>
+            <div class="total-row"><dt>Total</dt><dd id="total">$0.00</dd></div>
+          </dl>
+          <p class="form-note">Giá hiển thị là demo. Không có giao dịch thực tế.</p>
+        </aside>
+      </form>
+
+      <!-- Step 2: Payment -->
+      <form id="step-2" class="step-panel hidden flex-col" novalidate>
+        <div class="panel">
+          <h2>2. Phương thức thanh toán</h2>
+
+          <fieldset>
+            <legend>Chọn phương thức</legend>
+            <label class="radio">
+              <input type="radio" name="payMethod" value="card" checked /> Thẻ tín dụng / thẻ ghi nợ
+            </label>
+            <label class="radio">
+              <input type="radio" name="payMethod" value="paypal" /> PayPal (demo)
+            </label>
+          </fieldset>
+
+          <div id="cardFields" class="card-fields">
+            <label for="cardName">Name on card</label>
+            <input id="cardName" name="cardName" placeholder="NGUYEN MINH" value="NGUYEN MINH" />
+
+            <label for="cardNumber">Card number</label>
+            <input id="cardNumber" name="cardNumber" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242" value="4242 4242 4242 4242" />
+
+            <div class="two-cols">
+              <div>
+                <label for="expiry">Expiry</label>
+                <input id="expiry" name="expiry" placeholder="MM/YY" maxlength="5" value="12/28" />
+              </div>
+              <div>
+                <label for="cvc">CVC</label>
+                <input id="cvc" name="cvc" inputmode="numeric" maxlength="4" placeholder="123" value="123" />
+              </div>
+            </div>
+            <label class="checkbox">
+              <input type="checkbox" id="savePayment" /> Lưu phương thức thanh toán (demo)
+            </label>
+            <div id="paymentError" class="form-error" aria-live="polite"></div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="backToInfo">← Quay lại</button>
+            <button type="button" class="btn btn-primary" id="toReview">Tiếp: Xem lại →</button>
+          </div>
+        </div>
+
+        <aside class="panel summary" aria-hidden="true">
+          <h3>Order summary</h3>
+          <div id="miniSummary" class="mini-summary">
+            <!-- small summary -->
+          </div>
+        </aside>
+      </form>
+
+      <!-- Step 3: Review & Submit -->
+      <form id="step-3" class="step-panel grid-2 hidden" novalidate>
+        <div class="panel">
+          <h2>3. Xem lại & xác nhận</h2>
+
+          <div id="itemsList" class="cart-items">
+            <!-- JS renders items with Edit + Remove -->
+          </div>
+
+          <div class="form-note">Bạn có thể chỉnh sửa mỗi mục trước khi xác nhận.</div>
+
+          <!-- Edit modal (hidden) -->
+          <div id="editModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+            <div class="modal-content">
+              <h3 id="editTitle">Chỉnh sửa khoá học</h3>
+              <form id="editForm">
+                <p id="editCourseName" class="bold"></p>
+
+                <label for="editOption">Gói</label>
+                <select id="editOption">
+                  <option value="basic">Basic</option>
+                  <option value="certificate">With Certificate (+$20)</option>
+                </select>
+
+                <label for="editQty">Số lượng</label>
+                <input id="editQty" type="number" min="1" max="5" value="1" />
+
+                <div class="modal-actions">
+                  <button type="button" class="btn btn-secondary" id="cancelEdit">Hủy</button>
+                  <button type="button" class="btn btn-primary" id="saveEdit">Lưu</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="panel summary sticky" aria-labelledby="review-summary-title">
+          <h3 id="review-summary-title">Tổng tiền</h3>
+          <dl class="totals">
+            <div><dt>Subtotal</dt><dd id="r-subtotal">$0.00</dd></div>
+            <div><dt>Discount</dt><dd id="r-discount">-$0.00</dd></div>
+            <div><dt>Tax (5%)</dt><dd id="r-tax">$0.00</dd></div>
+            <div class="total-row"><dt>Final Total</dt><dd id="r-total">$0.00</dd></div>
+          </dl>
+
+          <label class="checkbox">
+            <input type="checkbox" id="agreeTerms" /> Tôi đồng ý với điều khoản & chính sách
+          </label>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="backToPayment">← Quay lại</button>
+            <button type="button" class="btn btn-primary" id="placeOrder">Đặt hàng</button>
+          </div>
+        </aside>
+      </form>
+
+      <!-- Confirmation -->
+      <div id="confirmation" class="panel hidden" role="status" aria-live="polite">
+        <h2>Đặt hàng thành công 🎉</h2>
+        <p id="orderMsg">Mã đơn hàng: <strong id="orderId">ORD-XXXX</strong></p>
+        <ul id="confItems"></ul>
+        <p>Tổng: <strong id="confTotal">$0.00</strong></p>
+        <div class="form-actions">
+          <a class="btn btn-primary" href="#" id="gotoCourses">Xem khoá học của tôi</a>
+          <button class="btn btn-secondary" id="downloadInvoice">Tải hóa đơn (PDF)</button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© 2025 EduCourses</div>
+      <nav aria-label="Footer">
+        <a href="#">Sitemap</a> · <a href="#">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
