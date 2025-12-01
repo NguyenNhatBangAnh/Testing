@@ -57,11 +57,10 @@ step = 0
 while user != 1:
     if user % 2 == 0:
         user /= 2
-        step += 1
     else:
         user *= 3
         user += 1
-        step += 1
+    step += 1
 print(f"It took {step} steps to reach 1")
 #Execise 10:
 user = int(input("Enter your number: "))
